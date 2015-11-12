@@ -8,8 +8,7 @@
 // module.exports = updateExport;
 // //// for node.js //////
 
-function updateExport (dis) {
-    display = dis;
+function updateExport (display) {
 
     function updateEdge(graph, src, dest, weight) {
         if(graph[src]){

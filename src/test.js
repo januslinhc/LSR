@@ -1,3 +1,5 @@
+// only node.js
+
 'use strict';
 
 var x = require('./update.js')(console.log)

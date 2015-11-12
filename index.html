@@ -20,6 +20,15 @@
       <label>Source node</label>
       <input type="text" id="source">
       <input value="Compute" type="button" onclick="compute();">
+      <br>
+      <h3>UpdateEdge</h3>
+      <label>Source node</label>
+      <input type="text" id="update-edge-src">
+      <label>Destination node</label>
+      <input type="text" id="update-edge-dest">
+      <label>New weight</label>
+      <input type="text" id="update-edge-weight">
+      <input value="UpdateEdge" type="button" onclick="updateEdge();">
     </section>
     <section>
       <h3>Feedback</h3>
@@ -29,6 +38,7 @@
     <!-- JavaScript --> 
     <script src="./src/Dijkstra.js" type="text/javascript"></script>
     <script src="./src/parser.js" type="text/javascript"></script>
+    <script src="./src/update.js" type="text/javascript"></script>
     <script src="./main.js" type="text/javascript"></script>
   </body>
 </html>

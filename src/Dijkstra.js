@@ -36,6 +36,8 @@ function Dijkstra(graph) {
   };
 
   this.printResult = function () {
+    var ret = ""
+
     for (var key in _result) {
       var node = key;
       var distance = _result[key].distance;
@@ -48,8 +50,10 @@ function Dijkstra(graph) {
         pathStr += (path[i] + ' > ');
       }
       pathStr += node;
-      console.log(node + ': ' + pathStr + ', ' + distance);
+      ret = ret + node + ': ' + pathStr + ', ' + distance;
     }
+
+    return ret;
   };
 
   this.solve = function () {

@@ -10,7 +10,7 @@ function readFile(fileInput, cb) {
           cb(reader.result);
         }
 
-        reader.readAsText(file);  
+        reader.readAsText(file);
       } else {
         alert("File format not supported!");
       }

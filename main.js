@@ -2,7 +2,7 @@
  *
  * @authors Tom Hu (h1994st@gmail.com)
  * @date    2015-11-09 12:03:20
- * @version 1.0
+ * @version 1.2
  */
 
 function compute() {
@@ -18,7 +18,9 @@ function compute() {
             var problem = new Dijkstra(graph);
             problem.setSource(source);
             problem.solve();
-            var result = problem.printResult();
+            problem.printResult();
+
+            var result = problem.getResultStr();
             feedback.innerText = result;
         });
     } else {

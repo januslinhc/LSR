@@ -2,7 +2,7 @@
  * 
  * @authors Tom Hu (h1994st@gmail.com)
  * @date    2015-11-09 12:17:39
- * @version 1.0
+ * @version 1.1
  */
 
 'use strict';
@@ -12,17 +12,22 @@ function Dijkstra(graph) {
   var _source;
   var _result = {};
 
+  var _retulrStr = '';
+
   this.setGraph = function (graph) {
     _graph = graph;
   };
-  this.getGraph = function (graph) {
+  this.getGraph = function () {
     return _graph;
   };
   this.setSource = function (source) {
     _source = source;
   };
-  this.getSource = function (source) {
+  this.getSource = function () {
     return _source;
+  };
+  this.getResult = function () {
+    return _result;
   };
 
   function init() {
@@ -36,7 +41,16 @@ function Dijkstra(graph) {
   };
 
   this.printResult = function () {
-    var ret = ""
+    if (!_retulrStr) {
+      _retulrStr = this.getResultStr();
+    }
+    console.log(_retulrStr);
+  };
+
+  this.getResultStr = function () {
+    if (_retulrStr) return _retulrStr;
+
+    _retulrStr = '';
 
     for (var key in _result) {
       var node = key;
@@ -50,10 +64,10 @@ function Dijkstra(graph) {
         pathStr += (path[i] + ' > ');
       }
       pathStr += node;
-      ret = ret + node + ': ' + pathStr + ', ' + distance;
+      _retulrStr += (node + ': ' + pathStr + ', ' + distance + '\n');
     }
 
-    return ret;
+    return _retulrStr;
   };
 
   this.solve = function () {
@@ -61,7 +75,7 @@ function Dijkstra(graph) {
     init();
 
     _result[_source].distance = 0;
-    var queue = [source];
+    var queue = [_source];
     while (queue.length !== 0) {
       var node = queue.shift();
 

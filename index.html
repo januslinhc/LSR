@@ -56,8 +56,36 @@
 					</form>
 				</div>
 			</div>
+			<div class="three column centered row">
+				<div class="column">
+					<h3>Add New Node</h3>
+					<form class="ui form">
+						<div class="field"><div class="ui labeled input">
+							<div class="ui label">Node id</div>
+							<input type="text" id="add-new-node-id">
+						</div></div>
+						<input class="ui primary button" onclick="addNewNode();" value="Add and refresh">
+					</form>
+				</div>
+				<div class="column">
+					<h3>Delete Node</h3>
+					<form class="ui form">
+						<div class="field"><div class="ui labeled input">
+							<div class="ui label">Node to delete</div>
+							<input type="text" id="delete-node-id">
+						</div></div>
+						<input class="ui primary button" onclick="deleteNode();" value="Delete and refresh">
+					</form>
+				</div>
+			</div>
 			<div class="one column centered row">
 				<div class="eleven wide column">
+					<div class="ui message">
+						<div class="header">
+							File Content
+						</div>
+						<p id="file-content"></p>
+					</div>
 					<div class="ui message">
 						<div class="header">
 							Feedback

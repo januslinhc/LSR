@@ -17,6 +17,7 @@ function compute() {
 
     if (fileInput.files.length > 0 && sourceInput.value != "") {
         readFile(fileInput, function(text) {
+            document.getElementById('file-content').innerText = text;
             graph = parseGraph(text);
             var source = sourceInput.value;
             console.log(source, graph);
@@ -58,5 +59,27 @@ function updateEdge() {
     }
 }
 
-// ...
+function addNewNode() {
+    var nodeId = document.getElementById('add-new-node-id').value;
+    var source = document.getElementById("source").value;
+
+    if(nodeId.length & source.length) {
+        update.addNode(graph, nodeId, {})
+        render(graph, source);
+    } else {
+        display("error: you don't enter everything!")
+    }
+}
+
+function deleteNode() {
+    var nodeId = document.getElementById('delete-node-id').value;
+    var source = document.getElementById("source").value;
+
+    if(nodeId.length & source.length) {
+        update.deleteNode(graph, nodeId);
+        render(graph, source);
+    } else {
+        display("error: you don't enter everything!")
+    }
+}
 

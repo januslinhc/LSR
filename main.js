@@ -51,7 +51,7 @@ function updateEdge() {
     var source = document.getElementById("source").value;
 
     if(src.length && dest.length && weight.length && source.length) {
-        update.updateEdge(graph, src, dest, weight);
+        update.updateEdge(graph, src, dest, parseInt(weight));
         render(graph, source);
     } else {
         display("error: you don't enter everything!")

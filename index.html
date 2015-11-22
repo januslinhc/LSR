@@ -27,30 +27,35 @@
               </div>
             </div>
             <div class="field"><div class="ui labeled input">
-              <div class="ui label">Source node</div>
-              <input type="text" id="source">
+              <div class="ui label">Source Node</div>
+              <input type="text" id="source" disabled>
             </div></div>
-            <div class="field">
-              <input class="ui primary button" onclick="compute();" value="Click to compute">
+            <div class="two fields">
+              <div class="field">
+                <button class="fluid ui button" id="compute-all-btn">Compute All</button>
+              </div>
+              <div class="field">
+                <button class="fluid ui button" id="single-step-btn">Single Step</button>
+              </div>
             </div>
           </form>
         </div>
         <div class="column">
-          <h3>UpdateEdge</h3>
+          <h3>Add/Update Edge</h3>
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
-              <div class="ui label">Source node</div>
+              <div class="ui label">Source Node</div>
               <input type="text" id="update-edge-src">
             </div></div>
             <div class="field"><div class="ui labeled input">
-              <div class="ui label">Destination node</div>
+              <div class="ui label">Destination Node</div>
               <input type="text" id="update-edge-dest">
             </div></div>
             <div class="field"><div class="ui labeled input">
-              <div class="ui label">New weight</div>
+              <div class="ui label">Weight</div>
               <input type="text" id="update-edge-weight">
             </div></div>
-            <input class="ui primary button" onclick="updateEdge();" value="Click to update">
+            <button class="fluid ui button" id="update-edge-btn">Click to Add/Update</button>
           </form>
         </div>
       </div>
@@ -59,20 +64,20 @@
           <h3>Add New Node</h3>
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
-              <div class="ui label">Node id</div>
+              <div class="ui label">Node Name</div>
               <input type="text" id="add-new-node-id">
             </div></div>
-            <input class="ui primary button" onclick="addNewNode();" value="Add and refresh">
+            <button class="fluid ui button" id="add-new-node-btn">Add and Refresh</button>
           </form>
         </div>
         <div class="column">
           <h3>Delete Node</h3>
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
-              <div class="ui label">Node to delete</div>
+              <div class="ui label">Node Name</div>
               <input type="text" id="delete-node-id">
             </div></div>
-            <input class="ui primary button" onclick="deleteNode();" value="Delete and refresh">
+            <button class="fluid ui button" id="delete-node-btn">Delete and Refresh</button>
           </form>
         </div>
       </div>

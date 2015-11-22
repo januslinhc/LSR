@@ -2,25 +2,25 @@
 
 function readFile(fileInput, cb) {
     var file = fileInput.files[0];
-    if(file) {
+    if (file) {
       if (file.name.endsWith('.lsa')) {
         var reader = new FileReader();
 
         reader.onload = function(e) {
           cb(reader.result);
-        }
+        };
 
         reader.readAsText(file);
       } else {
         alert("File format not supported!");
       }
-  };
+  }
 }
 
 
 function parseGraph(fileText) {
   var graph = {};
-  var lines = fileText.split('\n')
+  var lines = fileText.split('\n');
 
   lines.forEach(function (line) {
     var segments = line.split(' ');

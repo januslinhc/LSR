@@ -30,8 +30,8 @@ function updateExport (display) {
             display("error: node exists");
         } else {
             var everyKeyExists = Object.keys(map).every(function(x) {
-                return graph[x] != undefined;
-            })
+                return graph[x] !== undefined;
+            });
 
             if(everyKeyExists){
                 graph[node] = map;
@@ -40,7 +40,7 @@ function updateExport (display) {
                     graph[k][node] = weight;
                 }
             } else {
-                display("error: Some to-node doesn't exists")
+                display("error: Some to-node doesn't exists");
             }
         }
     }
@@ -53,7 +53,7 @@ function updateExport (display) {
                 delete graph[u][node];
             }
         } else {
-            display("warning: doesn't delete since it doesn't exist at all")
+            display("warning: doesn't delete since it doesn't exist at all");
         }
     }
 
@@ -62,5 +62,5 @@ function updateExport (display) {
         updateEdge : updateEdge,
         addNode    : addNode,
         deleteNode : deleteNode
-    }
+    };
 }

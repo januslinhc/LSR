@@ -15,7 +15,7 @@ function compute() {
     var sourceInput = document.getElementById("source");
     var fileInput = document.getElementById('input');
 
-    if (fileInput.files.length > 0 && sourceInput.value != "") {
+    if (fileInput.files.length > 0 && sourceInput.value !== "") {
         readFile(fileInput, function(text) {
             document.getElementById('file-content').innerText = text;
             graph = parseGraph(text);
@@ -28,15 +28,33 @@ function compute() {
     }
 }
 
+function getResultStr(result) {
+    var retulrStr = '';
+
+    for (var key in result) {
+        var node = key;
+        var distance = result[key].distance;
+        var path = result[key].path;
+
+        if (distance === Number.MAX_VALUE || distance === 1.7976931348623157e+308) continue; // 不输出无法到达的点
+
+        var pathStr = '';
+        for (var i = 0; i < path.length; i++) {
+        pathStr += (path[i] + ' > ');
+        }
+        pathStr += node;
+        retulrStr += (node + ': ' + pathStr + ', ' + distance + '\n');
+    }
+
+    return retulrStr;
+}
 
 function render(graph, source) {
-    var problem = new Dijkstra(graph);
-    problem.setSource(source);
-    problem.solve();
-    problem.printResult();
+    var problem = new Dijkstra(graph, source);
+    var result = problem.solve();
 
-    var result = problem.getResultStr();
-    display(result);
+    var resultStr = getResultStr(result);
+    display(resultStr);
 }
 
 // Example of using update.js
@@ -55,7 +73,7 @@ function updateEdge() {
         update.updateEdge(graph, src, dest, parseInt(weight));
         render(graph, source);
     } else {
-        display("error: you don't enter everything!")
+        display("error: you don't enter everything!");
     }
 }
 
@@ -64,10 +82,10 @@ function addNewNode() {
     var source = document.getElementById("source").value;
 
     if(nodeId.length & source.length) {
-        update.addNode(graph, nodeId, {})
+        update.addNode(graph, nodeId, {});
         render(graph, source);
     } else {
-        display("error: you don't enter everything!")
+        display("error: you don't enter everything!");
     }
 }
 
@@ -79,7 +97,7 @@ function deleteNode() {
         update.deleteNode(graph, nodeId);
         render(graph, source);
     } else {
-        display("error: you don't enter everything!")
+        display("error: you don't enter everything!");
     }
 }
 

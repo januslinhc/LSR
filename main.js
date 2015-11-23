@@ -191,6 +191,7 @@ $(document).ready(function() {
         if (!problem.singleStep()) {
             // Done
             console.log('Done!');
+            alert('Done!');
         }
 
         var result = problem.getResult();
@@ -314,11 +315,11 @@ $(document).ready(function() {
             var distance = result[key].distance;
             var path = result[key].path;
 
-            if (distance === Number.MAX_VALUE || distance === 1.7976931348623157e+308) continue; // 不输出无法到达的点
+            if (distance === Infinity) continue; // 不输出无法到达的点
 
             var pathStr = '';
             for (var i = 0; i < path.length; i++) {
-            pathStr += (path[i] + ' > ');
+                pathStr += (path[i] + ' > ');
             }
             pathStr += node;
             retulrStr += (node + ': ' + pathStr + ', ' + distance + '\n');

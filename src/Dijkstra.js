@@ -123,22 +123,24 @@
 
     // Default Values
     var _done = false;
-    var _queue = [];
-    var _queueIndex = 0;
     var _result = {};
+    var _unvisited = [];
+    var _current;
 
     // Constructor
     var _source = source;
     var _graph = graph;
-    _queue.push(_source);
+    _current = _source;
 
     init();
 
     // 初始化result标记
     function init() {
       for (var key in _graph) {
+        if (key !== _source) _unvisited.push(key);
+
         _result[key] = {
-          distance: Number.MAX_VALUE ? Number.MAX_VALUE : 1.7976931348623157e+308,
+          distance: Infinity,
           path: []
         };
       }
@@ -150,10 +152,9 @@
     // 重置
     this.reset = function () {
       _done = false;
-      _queue = [];
-      _queueIndex = 0;
       _result = {};
-      _queue.push(_source);
+      _unvisited = [];
+      _current = _source;
 
       init();
     };
@@ -162,20 +163,26 @@
     this.next = function () {
       if (_done) return false; // 已完成
 
-      var node = _queue[_queueIndex++];
-      for (var target in _graph[node]) {
-        if (_queue.indexOf(target) === -1) _queue.push(target); // 未遍历，且还不在queue中
-        else if (_queue.indexOf(target) < _queueIndex) continue; // 遍历过了
-
-        if (_graph[node][target] + _result[node].distance < _result[target].distance) {
-          _result[target].distance = _graph[node][target] + _result[node].distance;
-          _result[target].path = _result[node].path.concat(node);
+      for (var target in _graph[_current]) {
+        var alt = _graph[_current][target] + _result[_current].distance;
+        if (alt < _result[target].distance) {
+          _result[target].distance = alt;
+          _result[target].path = _result[_current].path.concat(_current);
         }
       }
 
-      if (_queue.length === _queueIndex) _done = true; // 刚完成
+      _unvisited.sort(function (a, b) {
+        return _result[b].distance - _result[a].distance;
+      });
 
-      return !_done;
+      if (_unvisited.length === 0 || _result[_current].distance === Infinity) {
+        _done = true; // 刚完成
+        return false;
+      }
+
+      _current = _unvisited.pop();
+
+      return true;
     };
 
     this.getResult = function () {

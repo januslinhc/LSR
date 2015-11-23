@@ -1,52 +1,33 @@
-// Credit: https://github.com/devenbhooshan/graph.js/blob/master/src/algorithms/shortest_path.js
+module.exports = bellmanFord;
 
-module.exports = bellman_ford;
+function bellmanFord(graph, source) {
+    var distance = {};
+    var vertices = [];
+    var predecessor = {};
 
-function bellman_ford(graph,source,destination){
-    this.previousNode=[];
-    this.distance=new Array();              
-    this.distance[source.name]=0;
-    var nodes=graph.getAllNodes();
-    length=nodes.length;
-    for(var i=0;i<length;i++){
-        if(nodes[i]!=source){
-            this.distance[nodes[i].name]=Number.POSITIVE_INFINITY;
-        }
+    for (var v in graph) {
+        distance[v] = Number.POSITIVE_INFINITY;
+        vertices.push(v);
     }
     
-    for(var k=0;k<length;k++){
-        for(var j=0;j<length;j++){
-            u=nodes[j];
-            adjList=u.adjList;
-            for (var i = 0; i < adjList.length; i++) {
-                v=adjList[i];
-                if(this.distance[u.name]!=Number.POSITIVE_INFINITY){    
-                    alt=this.distance[u.name]+u.weight[i];
-                    if(alt<this.distance[v.name]){
+    distance[source] = 0;
 
-                        this.previousNode[v.name]=u.name;
-                        this.distance[v.name]=alt;
-                    }
+    
+    for(var i = 1; i < vertices.length; i++) {
+        for(var u in graph) {
+            for(var v in graph) {
+                var w = graph[u][v];
+                if(distance[u] + w < distance[v]) {
+                    distance[v] = distance[u] + w;
+                    predecessor[v] = u;
                 }
             }
         }
     }
 
-    for(var j=0;j<length;j++){
-        u=nodes[j];
-        adjList=u.adjList;
-        for (var i = 0; i < adjList.length; i++) {
-            v=adjList[i];
-            if(this.distance[u.name]!=Number.POSITIVE_INFINITY){    
-                alt=this.distance[u.name]+u.weight[i];
-                if(alt<this.distance[v.name]){
-                    return null;
-                }
-            }
-        }
-    }
-    
-    return this.distance[destination.name]; 
-
+    return {
+        distance: distance,
+        predecessor: predecessor
+    };
 }
 

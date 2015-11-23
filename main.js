@@ -12,13 +12,13 @@ $(document).ready(function() {
     // Page elements
     var sourceInput = document.getElementById("source");
     var fileInput = document.getElementById('input');
-    var fileContetOutput = document.getElementById('file-content');
+    var graphContetOutput = document.getElementById('graph-content');
     var feedbackOutput = document.getElementById('feedback');
 
     $('#input').change(function (event) {
         if (this.files.length > 0) {
             readFile(this, function (text) {
-                fileContetOutput.innerText = text; // 显示文件
+                graphContetOutput.innerText = text; // 显示文件
                 graph = parseGraph(text);
                 console.log(graph);
             });
@@ -64,7 +64,12 @@ $(document).ready(function() {
         deleteNode();
     });
 
-    // TODO: Delete Edge
+    // Delete Edge
+    $('#delete-edge-btn').click(function (event) {
+        event.preventDefault();
+
+        deleteEdge();
+    });
 
     function singleStep() {
 
@@ -73,11 +78,11 @@ $(document).ready(function() {
     function compute() {
         if (fileInput.files.length > 0 && sourceInput.value !== "") {
             readFile(fileInput, function(text) {
-                fileContetOutput.innerText = text;
                 graph = parseGraph(text);
-                sourceName = sourceInput.value;
-                console.log(sourceName, graph);
-                render(graph, sourceName);
+                graphContetOutput.innerText = prettyPrint(graph);
+                var source = sourceInput.value;
+                console.log(source, graph);
+                render(graph, source);
             });
         } else {
             display("Input is empty");
@@ -114,6 +119,7 @@ $(document).ready(function() {
         var result = problem.solve();
 
         var resultStr = getResultStr(result);
+        graphContetOutput.innerText = prettyPrint(graph);
         display(resultStr);
     }
 
@@ -141,7 +147,7 @@ $(document).ready(function() {
         var nodeId = document.getElementById('add-new-node-id').value;
         var source = document.getElementById("source").value;
 
-        if(nodeId.length & source.length) {
+        if(nodeId.length && source.length) {
             update.addNode(graph, nodeId, {});
             render(graph, source);
         } else {
@@ -153,11 +159,37 @@ $(document).ready(function() {
         var nodeId = document.getElementById('delete-node-id').value;
         var source = document.getElementById("source").value;
 
-        if(nodeId.length & source.length) {
+        if(nodeId.length && source.length) {
             update.deleteNode(graph, nodeId);
             render(graph, source);
         } else {
             display("error: you don't enter everything!");
         }
+    }
+
+    function deleteEdge() {
+        var src = document.getElementById('delete-edge-src').value;
+        var dest = document.getElementById('delete-edge-dest').value;
+        var source = document.getElementById("source").value;
+
+        if(src.length && dest.length && source.length) {
+            update.deleteEdge(graph, src, dest);
+            render(graph, source);
+        } else {
+            display("error: you don't enter everything!");
+        }
+    }
+
+    function prettyPrint(graph) {
+        var str = "";
+        for(var v in graph) {
+            str += (v + ": ");
+            for(var u in graph[v]) {
+                if(u == v) continue;
+                str += (u + ":" + graph[v][u] + " ");
+            }
+            str += "\n";
+        }
+        return str;
     }
 });

@@ -81,13 +81,32 @@
           </form>
         </div>
       </div>
+      <div class="three column centered row">
+        <div class="column">
+          <h3>Delete Edge</h3>
+          <form class="ui form">
+            <div class="field"><div class="ui labeled input">
+              <div class="ui label">Source Node</div>
+              <input type="text" id="delete-edge-src">
+            </div></div>
+            <div class="field"><div class="ui labeled input">
+              <div class="ui label">Destination Node</div>
+              <input type="text" id="delete-edge-dest">
+            </div></div>
+            <button class="fluid ui button" id="delete-edge-btn">Delete and Refresh</button>
+          </form>
+        </div>
+        <div class="column">
+          <!-- Place Holder -->
+        </div>
+      </div>
       <div class="one column centered row">
         <div class="eleven wide column">
           <div class="ui message">
             <div class="header">
-              File Content
+              Graph Content
             </div>
-            <p id="file-content"></p>
+            <p id="graph-content"></p>
           </div>
           <div class="ui message">
             <div class="header">

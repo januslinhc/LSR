@@ -10,10 +10,11 @@
 
 function updateExport(display) {
     function updateEdge(graph, src, dest, weight) {
-        if(graph && graph[src]){
-            if(!graph[src][dest]) {
-                display("log: new edge is added");
-                return false;
+        if (graph && graph[src]){
+            if(graph[src][dest]) {
+                graph[src][dest] = weight;
+                // display("log: new edge is added");
+                return true;
             }
             if(!graph[dest]) {
                 graph[dest] = {};

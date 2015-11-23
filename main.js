@@ -19,11 +19,16 @@ $(document).ready(function() {
     var graphContetOutput = document.getElementById('graph-content');
     var feedbackOutput = document.getElementById('feedback');
 
+    // Visulization
+    var network = $('#network-visulization');
+
     $('#input').change(function (event) {
         if (this.files.length > 0) {
             readFile(this, function (text) {
                 graph = parseGraph(text);
                 console.log(graph);
+
+                createGraphVisulazation(graph, network.width(), 300);
 
                 needUpdate = true;
 
@@ -99,12 +104,14 @@ $(document).ready(function() {
         var graphStr = prettyPrint(graph);
         if (graphStr) {
             this.innerText = prettyPrint(graph);
+            createGraphVisulazation(graph, network.width(), 300); // 更新图
         } else {
             $('.graph-related').trigger('graphEmpty');
         }
     });
     $('#graph-content.graph-related').on('graphEmpty', function (event) {
         this.innerText = '(Empty graph)';
+        removeGraphVisulazation();
     });
 
     // Compute
@@ -197,6 +204,8 @@ $(document).ready(function() {
         var result = problem.getResult();
         var resultStr = getResultStr(result);
         display(resultStr);
+
+        updateGraphVisulazation(result);
     }
 
     function compute() {
@@ -205,6 +214,8 @@ $(document).ready(function() {
         var resultStr = getResultStr(result);
         graphContetOutput.innerText = prettyPrint(graph);
         display(resultStr);
+
+        updateGraphVisulazation(result);
     }
 
     function display(text) {

@@ -8,7 +8,7 @@
 // module.exports = updateExport;
 // //// for node.js //////
 
-function updateExport (display) {
+function updateExport(display) {
 
     function updateEdge(graph, src, dest, weight) {
         if(graph[src]){
@@ -22,7 +22,6 @@ function updateExport (display) {
             display("error: invalid source point " + src);
         }
     }
-
 
     // If node exists, or any to-node in map is not defined, feedback error
     function addNode(graph, node, map) {

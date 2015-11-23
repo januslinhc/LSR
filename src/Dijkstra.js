@@ -20,14 +20,17 @@
     var _source = source;
     var _solver;
 
-    // 有可能的话，初始化solver
+    // 有可能的话，设置source
     if (graph && source) {
-      logger('info', 'Initializing solver.');
-      initSolver();
+      this.setSource(source); // 其中有handle error的部分
     }
 
     // Setter and Getter
     this.setGraph = function (graph) {
+      if (!_graph) { // 图为空
+        logger('error', 'Empty argument.');
+        return false;
+      }
       _graph = graph;
       _source = ''; // 清空source
       _solver = undefined; // 清除老的solver
@@ -39,6 +42,10 @@
     this.setSource = function (source) {
       if (!_graph) { // 图为空
         logger('error', 'Empty graph. Please set graph first.');
+        return false;
+      }
+      if (!source) {
+        logger('error', 'Empty argument.');
         return false;
       }
       if (!(source in _graph)) { // source不在图中

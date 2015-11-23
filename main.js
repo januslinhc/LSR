@@ -7,12 +7,18 @@
 
 $(document).ready(function() {
     var graph = {};
-    var source;
+    var sourceName;
+
+    // Page elements
+    var sourceInput = document.getElementById("source");
+    var fileInput = document.getElementById('input');
+    var fileContetOutput = document.getElementById('file-content');
+    var feedbackOutput = document.getElementById('feedback');
 
     $('#input').change(function (event) {
         if (this.files.length > 0) {
             readFile(this, function (text) {
-                document.getElementById('file-content').innerText = text; // 显示文件
+                fileContetOutput.innerText = text; // 显示文件
                 graph = parseGraph(text);
                 console.log(graph);
             });
@@ -34,6 +40,7 @@ $(document).ready(function() {
     $('#single-step-btn').click(function (event) {
         event.preventDefault();
 
+        singleStep();
     });
 
     // Add / Update Edge
@@ -57,17 +64,20 @@ $(document).ready(function() {
         deleteNode();
     });
 
-    function compute() {
-        var sourceInput = document.getElementById("source");
-        var fileInput = document.getElementById('input');
+    // TODO: Delete Edge
 
+    function singleStep() {
+
+    }
+
+    function compute() {
         if (fileInput.files.length > 0 && sourceInput.value !== "") {
             readFile(fileInput, function(text) {
-                document.getElementById('file-content').innerText = text;
+                fileContetOutput.innerText = text;
                 graph = parseGraph(text);
-                var source = sourceInput.value;
-                console.log(source, graph);
-                render(graph, source);
+                sourceName = sourceInput.value;
+                console.log(sourceName, graph);
+                render(graph, sourceName);
             });
         } else {
             display("Input is empty");
@@ -75,7 +85,7 @@ $(document).ready(function() {
     }
 
     function display(text) {
-        document.getElementById('feedback').innerText = text;
+        feedbackOutput.innerText = text;
     }
 
     function getResultStr(result) {

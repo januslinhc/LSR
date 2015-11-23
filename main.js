@@ -8,6 +8,8 @@
 $(document).ready(function() {
     var graph = {};
     var sourceName;
+    var problem;
+    var needUpdate = false;
 
     // Page elements
     var sourceInput = document.getElementById("source");
@@ -21,17 +23,73 @@ $(document).ready(function() {
                 graphContetOutput.innerText = text; // 显示文件
                 graph = parseGraph(text);
                 console.log(graph);
-            });
 
-            $('#source').attr('disabled', false); // 允许输入source
+                needUpdate = true;
+
+                $('#source').val('');
+                $('.source-related').trigger('sourceEmpty');
+
+                $('.graph-related').trigger('graph'); // Trigger event
+            });
         } else {
             display("Input is empty");
+
+            $('.graph-related').trigger('graphEmpty');
         }
+    });
+
+    $('#source').bind("propertychange change click keyup input paste", function (event) {
+      // If value has changed...
+      if ($(this).data('oldVal') != $(this).val()) {
+       // Updated stored value
+       $(this).data('oldVal', $(this).val());
+
+       $(this).trigger('myChange');
+     }
+   });
+
+    $('#source').on('myChange', function (event) {
+        var content = this.value;
+        console.log(content);
+
+        sourceName = content;
+
+        if (content) {
+            needUpdate = true;
+
+            $('.source-related').trigger('source');
+        } else {
+            needUpdate = false;
+
+            $('.source-related').trigger('sourceEmpty');
+        }
+    });
+
+    // Add event listeners
+    $('input.graph-related').on('graph', function (event) {
+        $(this).attr('disabled', false);
+    });
+    $('button.graph-related').on('graph', function (event) {
+        $(this).removeClass('disabled');
+    });
+    $('input.graph-related').on('graphEmpth', function (event) {
+        $(this).attr('disabled', true);
+    });
+    $('button.graph-related').on('graphEmpth', function (event) {
+        $(this).addClass('disabled');
+    });
+    $('button.source-related').on('source', function (event) {
+        $(this).removeClass('disabled');
+    });
+    $('button.source-related').on('sourceEmpty', function (event) {
+        $(this).addClass('disabled');
     });
 
     // Compute
     $('#compute-all-btn').click(function (event) {
         event.preventDefault();
+
+        initDijkstraProblem();
 
         compute();
     });
@@ -39,6 +97,8 @@ $(document).ready(function() {
     // Single Step
     $('#single-step-btn').click(function (event) {
         event.preventDefault();
+
+        initDijkstraProblem();
 
         singleStep();
     });
@@ -71,8 +131,22 @@ $(document).ready(function() {
         deleteEdge();
     });
 
-    function singleStep() {
+    function initDijkstraProblem() {
+        if (needUpdate) {
+            problem = new Dijkstra(graph, sourceName);
+            needUpdate = false;
+        }
+    }
 
+    function singleStep() {
+        if (!problem.singleStep()) {
+            // Done
+            console.log('Done!');
+        }
+
+        var result = problem.getResult();
+        var resultStr = getResultStr(result);
+        display(resultStr);
     }
 
     function compute() {

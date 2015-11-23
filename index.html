@@ -28,14 +28,14 @@
             </div>
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Source Node</div>
-              <input type="text" id="source" disabled placeholder="Enter source node">
+              <input type="text" class="graph-related" id="source" disabled placeholder="Enter source node">
             </div></div>
             <div class="two fields">
               <div class="field">
-                <button class="fluid ui button" id="compute-all-btn">Compute All</button>
+                <button class="fluid ui disabled button source-related" id="compute-all-btn">Compute All</button>
               </div>
               <div class="field">
-                <button class="fluid ui button" id="single-step-btn">Single Step</button>
+                <button class="fluid ui disabled button source-related" id="single-step-btn">Single Step</button>
               </div>
             </div>
           </form>
@@ -45,17 +45,17 @@
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Source Node</div>
-              <input type="text" id="update-edge-src" placeholder="Enter source node">
+              <input type="text" class="graph-related" id="update-edge-src" disabled placeholder="Enter source node">
             </div></div>
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Destination Node</div>
-              <input type="text" id="update-edge-dest" placeholder="Enter destination node">
+              <input type="text" class="graph-related" id="update-edge-dest" disabled placeholder="Enter destination node">
             </div></div>
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Weight</div>
-              <input type="text" id="update-edge-weight" placeholder="Enter edge weight">
+              <input type="text" class="graph-related" id="update-edge-weight" disabled placeholder="Enter edge weight">
             </div></div>
-            <button class="fluid ui button" id="update-edge-btn">Click to Add/Update</button>
+            <button class="fluid ui disabled button graph-related" id="update-edge-btn">Click to Add/Update</button>
           </form>
         </div>
       </div>
@@ -65,9 +65,9 @@
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Node Name</div>
-              <input type="text" id="add-new-node-id" placeholder="Enter node name">
+              <input type="text" class="graph-related" id="add-new-node-id" disabled placeholder="Enter node name">
             </div></div>
-            <button class="fluid ui button" id="add-new-node-btn">Add and Refresh</button>
+            <button class="fluid ui disabled button graph-related" id="add-new-node-btn">Add and Refresh</button>
           </form>
         </div>
         <div class="column">
@@ -75,9 +75,9 @@
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Node Name</div>
-              <input type="text" id="delete-node-id" placeholder="Enter node name">
+              <input type="text" class="graph-related" id="delete-node-id" disabled placeholder="Enter node name">
             </div></div>
-            <button class="fluid ui button" id="delete-node-btn">Delete and Refresh</button>
+            <button class="fluid ui disabled button graph-related" id="delete-node-btn">Delete and Refresh</button>
           </form>
         </div>
       </div>
@@ -87,13 +87,13 @@
           <form class="ui form">
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Source Node</div>
-              <input type="text" id="delete-edge-src">
+              <input type="text" class="graph-related" id="delete-edge-src" disabled placeholder="Enter source code">
             </div></div>
             <div class="field"><div class="ui labeled input">
               <div class="ui label">Destination Node</div>
-              <input type="text" id="delete-edge-dest">
+              <input type="text" class="graph-related" id="delete-edge-dest" disabled placeholder="Enter destination code">
             </div></div>
-            <button class="fluid ui button" id="delete-edge-btn">Delete and Refresh</button>
+            <button class="fluid ui disabled button graph-related" id="delete-edge-btn">Delete and Refresh</button>
           </form>
         </div>
         <div class="column">

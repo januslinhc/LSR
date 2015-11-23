@@ -20,11 +20,6 @@
     var _source = source;
     var _solver;
 
-    // 有可能的话，设置source
-    if (graph && source) {
-      this.setSource(source); // 其中有handle error的部分
-    }
-
     // Setter and Getter
     this.setGraph = function (graph) {
       if (!_graph) { // 图为空
@@ -69,6 +64,11 @@
       }
       return _solver.getResult();
     };
+
+    // 有可能的话，设置source
+    if (graph && source) {
+      this.setSource(source); // 其中有handle error的部分
+    }
 
     function initSolver() {
       if (!_graph) { // graph没有设置

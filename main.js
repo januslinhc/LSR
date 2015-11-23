@@ -104,6 +104,7 @@ $(document).ready(function() {
         var result = problem.solve();
 
         var resultStr = getResultStr(result);
+        renderVis(graph, document.getElementById("svg-elem"));
         display(resultStr);
     }
 

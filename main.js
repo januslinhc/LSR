@@ -12,7 +12,7 @@ $(document).ready(function() {
     $('#input').change(function (event) {
         if (this.files.length > 0) {
             readFile(this, function (text) {
-                document.getElementById('file-content').innerText = text; // 显示文件
+                document.getElementById('graph-content').innerText = text; // 显示文件
                 graph = parseGraph(text);
                 console.log(graph);
             });
@@ -63,8 +63,8 @@ $(document).ready(function() {
 
         if (fileInput.files.length > 0 && sourceInput.value !== "") {
             readFile(fileInput, function(text) {
-                document.getElementById('file-content').innerText = text;
                 graph = parseGraph(text);
+                document.getElementById('graph-content').innerText = prettyPrint(graph);
                 var source = sourceInput.value;
                 console.log(source, graph);
                 render(graph, source);
@@ -104,6 +104,7 @@ $(document).ready(function() {
         var result = problem.solve();
 
         var resultStr = getResultStr(result);
+        document.getElementById('graph-content').innerText = prettyPrint(graph)
         display(resultStr);
     }
 
@@ -149,5 +150,19 @@ $(document).ready(function() {
         } else {
             display("error: you don't enter everything!");
         }
+    }
+
+
+    function prettyPrint(graph) {
+        var str = "";
+        for(var v in graph) {
+            str += (v + ": ");
+            for(var u in graph[v]) {
+                if(u == v) continue;
+                str += (u + ":" + graph[v][u] + " ");
+            }
+            str += "\n";
+        }
+        return str;
     }
 });

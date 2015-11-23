@@ -15,14 +15,15 @@ function updateExport (display) {
             if(!graph[src][dest]) {
                 display("log: new edge is added");
             }
-            graph[dest] = {};
+            if(!graph[dest]) {
+                graph[dest] = {};
+            }
             graph[src][dest] = weight;
             graph[dest][src] = weight;
         } else {
             display("error: invalid source point " + src);
         }
     }
-
 
     // If node exists, or any to-node in map is not defined, feedback error
     function addNode(graph, node, map) {

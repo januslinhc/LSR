@@ -30,12 +30,15 @@
               <div class="ui label">Source Node</div>
               <input type="text" class="graph-related" id="source" disabled placeholder="Enter source node">
             </div></div>
-            <div class="two fields">
+            <div class="three fields">
               <div class="field">
                 <button class="fluid ui disabled button source-related" id="compute-all-btn">Compute All</button>
               </div>
               <div class="field">
                 <button class="fluid ui disabled button source-related" id="single-step-btn">Single Step</button>
+              </div>
+              <div class="field">
+                <button class="fluid ui disabled button graph-related" id="reset-btn">Reset</button>
               </div>
             </div>
           </form>
@@ -106,7 +109,7 @@
             <div class="header">
               Graph Content
             </div>
-            <p id="graph-content"></p>
+            <p id="graph-content" class="graph-related">(Empty graph)</p>
           </div>
           <div class="ui message">
             <div class="header">

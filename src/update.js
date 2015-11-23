@@ -13,6 +13,7 @@ function updateExport(display) {
         if(graph && graph[src]){
             if(!graph[src][dest]) {
                 display("log: new edge is added");
+                return false;
             }
             if(!graph[dest]) {
                 graph[dest] = {};
@@ -21,7 +22,10 @@ function updateExport(display) {
             graph[dest][src] = weight;
         } else {
             display("error: invalid source point " + src);
+            return false;
         }
+
+        return true;
     }
 
     function deleteEdge(graph, src, dest) {
@@ -30,28 +34,35 @@ function updateExport(display) {
             delete graph[dest][src];
         } else {
             display("warning: Deletion of edge is invalid");
+            return false;
         }
+
+        return true;
     }
 
     // If node exists, or any to-node in map is not defined, feedback error
     function addNode(graph, node, map) {
         if(graph && graph[node]) {
             display("error: node exists");
-        } else {
-            var everyKeyExists = Object.keys(map).every(function(x) {
-                return graph[x] !== undefined;
-            });
-
-            if(everyKeyExists){
-                graph[node] = map;
-                for (var k in map) {
-                    var weight = map[k];
-                    graph[k][node] = weight;
-                }
-            } else {
-                display("error: Some to-node doesn't exists");
-            }
+            return false;
         }
+
+        var everyKeyExists = Object.keys(map).every(function(x) {
+            return graph[x] !== undefined;
+        });
+
+        if(everyKeyExists){
+            graph[node] = map;
+            for (var k in map) {
+                var weight = map[k];
+                graph[k][node] = weight;
+            }
+        } else {
+            display("error: Some to-node doesn't exists");
+            return false;
+        }
+
+        return true;
     }
 
     // If such node doesn't exist, feedback warning
@@ -65,7 +76,10 @@ function updateExport(display) {
             }
         } else {
             display("warning: doesn't delete since it doesn't exist at all");
+            return false;
         }
+
+        return true;
     }
 
     return {

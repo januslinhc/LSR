@@ -5,6 +5,8 @@
  * @version 1.2
  */
 
+'use strict';
+
 $(document).ready(function() {
     var graph = {};
     var sourceName;
@@ -20,7 +22,6 @@ $(document).ready(function() {
     $('#input').change(function (event) {
         if (this.files.length > 0) {
             readFile(this, function (text) {
-                graphContetOutput.innerText = text; // 显示文件
                 graph = parseGraph(text);
                 console.log(graph);
 
@@ -39,13 +40,13 @@ $(document).ready(function() {
     });
 
     $('#source').bind("propertychange change click keyup input paste", function (event) {
-      // If value has changed...
-      if ($(this).data('oldVal') != $(this).val()) {
-       // Updated stored value
-       $(this).data('oldVal', $(this).val());
+        // If value has changed...
+        if ($(this).data('oldVal') != $(this).val()) {
+            // Updated stored value
+            $(this).data('oldVal', $(this).val());
 
-       $(this).trigger('myChange');
-     }
+            $(this).trigger('myChange');
+        }
    });
 
     $('#source').on('myChange', function (event) {
@@ -72,10 +73,10 @@ $(document).ready(function() {
     $('button.graph-related').on('graph', function (event) {
         $(this).removeClass('disabled');
     });
-    $('input.graph-related').on('graphEmpth', function (event) {
+    $('input.graph-related').on('graphEmpty', function (event) {
         $(this).attr('disabled', true);
     });
-    $('button.graph-related').on('graphEmpth', function (event) {
+    $('button.graph-related').on('graphEmpty', function (event) {
         $(this).addClass('disabled');
     });
     $('button.source-related').on('source', function (event) {
@@ -83,6 +84,27 @@ $(document).ready(function() {
     });
     $('button.source-related').on('sourceEmpty', function (event) {
         $(this).addClass('disabled');
+        needUpdate = false;
+    });
+    $('#graph-content.graph-related').on('graph', function (event) {
+        this.innerText = prettyPrint(graph);
+    });
+    $('#graph-content.graph-related').on('graphUpdate', function (event) {
+        needUpdate = true;
+
+        // 清空现有的feedback输出
+        feedbackOutput.innerText = '(Empty)';
+
+        // 更新graph输出
+        var graphStr = prettyPrint(graph);
+        if (graphStr) {
+            this.innerText = prettyPrint(graph);
+        } else {
+            $('.graph-related').trigger('graphEmpty');
+        }
+    });
+    $('#graph-content.graph-related').on('graphEmpty', function (event) {
+        this.innerText = '(Empty graph)';
     });
 
     // Compute
@@ -101,6 +123,13 @@ $(document).ready(function() {
         initDijkstraProblem();
 
         singleStep();
+    });
+
+    // Reset
+    $('#reset-btn').click(function (event) {
+        event.preventDefault();
+
+        reset();
     });
 
     // Add / Update Edge
@@ -138,6 +167,26 @@ $(document).ready(function() {
         }
     }
 
+    function reset() {
+        // 清空所有
+        // 清空文件输入
+        $('#input').val('');
+        $('.graph-related').trigger('graphEmpty');
+
+        // 清空source输入
+        $('#source').val('');
+        $('.source-related').trigger('sourceEmpty');
+
+        // 清空feedback
+        feedbackOutput.innerText = '(Empty)';
+
+        // init
+        graph = {};
+        sourceName = '';
+        problem = undefined;
+        needUpdate = false;
+    }
+
     function singleStep() {
         if (!problem.singleStep()) {
             // Done
@@ -150,26 +199,111 @@ $(document).ready(function() {
     }
 
     function compute() {
-        if(isEmpty(graph)) {
-            var fileInput = document.getElementById('input');
+        var result = problem.solve();
 
-            if (fileInput.files.length > 0) {
-                readFile(fileInput, function(text) {
-                    graph = parseGraph(text);
-                    document.getElementById('graph-content').innerText = prettyPrint(graph);
-                    console.log(graph);
-                    render(graph);
-                });
-            } else {
-                display("Input is empty");
-            }
-        } else {
-            render(graph);
-        }
+        var resultStr = getResultStr(result);
+        graphContetOutput.innerText = prettyPrint(graph);
+        display(resultStr);
     }
 
     function display(text) {
         feedbackOutput.innerText = text;
+    }
+
+    // Example of using update.js
+    // load update.js before this
+
+    var update = updateExport(display);
+
+    // Re-export
+    function updateEdge() {
+        var srcVal = $('#update-edge-src').val();
+        var destVal = $('#update-edge-dest').val();
+        var weightVal = $('#update-edge-weight').val();
+
+        if(srcVal.length && destVal.length && weightVal.length) {
+            if (update.updateEdge(graph, srcVal, destVal, parseInt(weightVal))) {
+                $('.graph-related').trigger('graphUpdate'); // 触发graph update事件
+            }
+        } else {
+            display("error: you don't enter everything!");
+        }
+
+        // 清空输入
+        $('#update-edge-src').val('');
+        $('#update-edge-dest').val('');
+        $('#update-edge-weight').val('');
+    }
+
+    function addNewNode() {
+        var nodeIdVal = $('#add-new-node-id').val();
+
+        if(nodeIdVal.length) {
+            if (update.addNode(graph, nodeIdVal, {})) {
+                $('.graph-related').trigger('graphUpdate');
+            }
+        } else {
+            display("error: you don't enter everything!");
+        }
+
+        // 清空输入
+        $('#add-new-node-id').val('');
+    }
+
+    function deleteNode() {
+        var nodeIdVal = $('#delete-node-id').val();
+
+        if (nodeIdVal.length) {
+            if (update.deleteNode(graph, nodeIdVal)) { // 成功update
+                $('.graph-related').trigger('graphUpdate');
+                if (nodeIdVal === sourceName) {
+                    // 清空source input
+                    $('#source').val('');
+                    $('.source-related').trigger('sourceEmpty');
+                }
+            }
+        } else {
+            display("error: you don't enter everything!");
+        }
+
+        // 清空输入
+        $('#delete-node-id').val('');
+    }
+
+    function deleteEdge() {
+        var srcVal = $('#delete-edge-src').val();
+        var destVal = $('#delete-edge-dest').val();
+
+        if(srcVal.length && destVal.length) {
+            if (update.deleteEdge(graph, srcVal, destVal)) {
+                $('.graph-related').trigger('graphUpdate');
+                if (srcVal === sourceName || destVal == sourceName) {
+                    // 清空source input
+                    $('#source').val('');
+                    $('.source-related').trigger('sourceEmpty');
+                }
+            }
+        } else {
+            display("error: you don't enter everything!");
+        }
+
+        // 清空输入
+        $('#delete-edge-src').val('');
+        $('#delete-edge-dest').val('');
+    }
+
+    // Helpers
+    function prettyPrint(graph) {
+        var str = "";
+        for (var v in graph) {
+            str += (v + ": ");
+            for (var u in graph[v]) {
+                if(u == v) continue;
+                str += (u + ":" + graph[v][u] + " ");
+            }
+            str += "\n";
+        }
+        return str;
     }
 
     function getResultStr(result) {
@@ -191,97 +325,6 @@ $(document).ready(function() {
         }
 
         return retulrStr;
-    }
-
-    function render(graph) {
-        var source = $('#source').val();
-        if(source.length) {
-            var problem = new Dijkstra(graph, source);
-            var result = problem.solve();
-    
-            var resultStr = getResultStr(result);
-            graphContetOutput.innerText = prettyPrint(graph)
-            display(resultStr);
-        } else {
-            display("error: source is empty");
-        }
-    }
-
-    // Example of using update.js
-    // load update.js before this
-
-    var update = updateExport(display);
-
-    // Re-export
-    function updateEdge() {
-        var srcVal = $('#update-edge-src').val();
-        var destVal = $('#update-edge-dest').val();
-        var weightVal = $('#update-edge-weight').val();
-
-        if(srcVal.length && destVal.length && weightVal.length) {
-            update.updateEdge(graph, srcVal, destVal, parseInt(weightVal));
-            render(graph);
-        } else {
-            display("error: you don't enter everything!");
-        }
-        $('#update-edge-src').val('');
-        $('#update-edge-dest').val('');
-        $('#update-edge-weight').val('');
-    }
-
-    function addNewNode() {
-        var nodeIdVal = $('#add-new-node-id').val();
-
-        if(nodeIdVal.length) {
-            update.addNode(graph, nodeIdVal, {});
-            render(graph);
-        } else {
-            display("error: you don't enter everything!");
-        }
-
-        $('#add-new-node-id').val('');
-    }
-
-    function deleteNode() {
-        var nodeIdVal = $('#delete-node-id').val();
-
-        if(nodeIdVal.length) {
-            update.deleteNode(graph, nodeIdVal);
-            render(graph);
-        } else {
-            display("error: you don't enter everything!");
-        }
-
-        $('#delete-node-id').val('');
-    }
-
-    function deleteEdge() {
-        var srcVal = $('#delete-edge-src').val();
-        var destVal = $('#delete-edge-dest').val();
-
-        if(srcVal.length && destVal.length) {
-            update.deleteEdge(graph, srcVal, destVal);
-            render(graph);
-        } else {
-            display("error: you don't enter everything!");
-        }
-        $('#delete-edge-src').val('');
-        $('#delete-edge-dest').val('');
-    }
-
-    // Helpers
-
-    function prettyPrint(graph) {
-        var str = "";
-        for(var v in graph) {
-            str += (v + ": ");
-            for(var u in graph[v]) {
-                if(u == v) continue;
-                str += (u + ":" + graph[v][u] + " ");
-            }
-            str += "\n";
-        }
-        return str;
     }
 
     function isEmpty(obj) {

@@ -7,6 +7,11 @@
 
 'use strict';
 
+// 前方高能 node.js only
+// var window = {}; // Fake window
+// 前方高能 node.js only
+
+
 (function (_window) {
   // Logger
   function logger(type, text) {
@@ -184,3 +189,7 @@
     };
   }
 })(window);
+
+// 前方高能 node.js only
+// module.exports = window.Dijkstra;
+// 前方高能 node.js only

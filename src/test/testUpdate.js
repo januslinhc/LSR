@@ -2,7 +2,7 @@
 
 'use strict';
 
-var x = require('./update.js')(console.log)
+var x = require('../update.js')(console.log)
 var assert = require('assert');
 
 var g = {};

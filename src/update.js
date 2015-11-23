@@ -25,18 +25,15 @@ function updateExport(display) {
         }
     }
 
-<<<<<<< HEAD
-=======
     function deleteEdge(graph, src, dest) {
         if(graph[src] && graph[src][dest] && graph[src][dest]) {
             delete graph[src][dest];
-            delete graph[dest][src]
+            delete graph[dest][src];
         } else {
-            display("warning: Deletion of edge is invalid")
+            display("warning: Deletion of edge is invalid");
         }
     }
 
->>>>>>> 1bcb22c417a2011933fb5d21d774caeb51dbfe65
     // If node exists, or any to-node in map is not defined, feedback error
     function addNode(graph, node, map) {
         if(graph[node]) {

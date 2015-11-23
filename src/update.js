@@ -9,9 +9,8 @@
 // //// for node.js //////
 
 function updateExport(display) {
-
     function updateEdge(graph, src, dest, weight) {
-        if(graph[src]){
+        if(graph && graph[src]){
             if(!graph[src][dest]) {
                 display("log: new edge is added");
             }
@@ -26,7 +25,7 @@ function updateExport(display) {
     }
 
     function deleteEdge(graph, src, dest) {
-        if(graph[src] && graph[src][dest] && graph[src][dest]) {
+        if(graph && graph[src] && graph[src][dest] && graph[dest][src]) {
             delete graph[src][dest];
             delete graph[dest][src];
         } else {
@@ -36,7 +35,7 @@ function updateExport(display) {
 
     // If node exists, or any to-node in map is not defined, feedback error
     function addNode(graph, node, map) {
-        if(graph[node]) {
+        if(graph && graph[node]) {
             display("error: node exists");
         } else {
             var everyKeyExists = Object.keys(map).every(function(x) {
@@ -57,16 +56,17 @@ function updateExport(display) {
 
     // If such node doesn't exist, feedback warning
     function deleteNode(graph, node) {
-        if(graph[node]) {
+        if(graph && graph[node]) {
             delete graph[node];
             for (var u in graph) {
-                delete graph[u][node];
+                if(graph[u]){
+                    delete graph[u][node];
+                }
             }
         } else {
             display("warning: doesn't delete since it doesn't exist at all");
         }
     }
-
 
     return {
         updateEdge : updateEdge,

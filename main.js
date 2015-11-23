@@ -57,6 +57,14 @@ $(document).ready(function() {
         deleteNode();
     });
 
+    // Delete Edge
+    $('#delete-edge-btn').click(function (event) {
+        event.preventDefault();
+
+        deleteEdge();
+    });
+
+
     function compute() {
         var sourceInput = document.getElementById("source");
         var fileInput = document.getElementById('input');
@@ -132,7 +140,7 @@ $(document).ready(function() {
         var nodeId = document.getElementById('add-new-node-id').value;
         var source = document.getElementById("source").value;
 
-        if(nodeId.length & source.length) {
+        if(nodeId.length && source.length) {
             update.addNode(graph, nodeId, {});
             render(graph, source);
         } else {
@@ -144,8 +152,21 @@ $(document).ready(function() {
         var nodeId = document.getElementById('delete-node-id').value;
         var source = document.getElementById("source").value;
 
-        if(nodeId.length & source.length) {
+        if(nodeId.length && source.length) {
             update.deleteNode(graph, nodeId);
+            render(graph, source);
+        } else {
+            display("error: you don't enter everything!");
+        }
+    }
+
+    function deleteEdge() {
+        var src = document.getElementById('delete-edge-src').value;
+        var dest = document.getElementById('delete-edge-dest').value;
+        var source = document.getElementById("source").value;
+
+        if(src.length && dest.length && source.length) {
+            update.deleteEdge(graph, src, dest);
             render(graph, source);
         } else {
             display("error: you don't enter everything!");

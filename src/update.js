@@ -25,6 +25,15 @@ function updateExport (display) {
         }
     }
 
+    function deleteEdge(graph, src, dest) {
+        if(graph[src] && graph[src][dest] && graph[src][dest]) {
+            delete graph[src][dest];
+            delete graph[dest][src]
+        } else {
+            display("warning: Deletion of edge is invalid")
+        }
+    }
+
     // If node exists, or any to-node in map is not defined, feedback error
     function addNode(graph, node, map) {
         if(graph[node]) {
@@ -62,6 +71,7 @@ function updateExport (display) {
     return {
         updateEdge : updateEdge,
         addNode    : addNode,
-        deleteNode : deleteNode
+        deleteNode : deleteNode,
+        deleteEdge : deleteEdge
     };
 }

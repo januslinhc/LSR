@@ -66,19 +66,21 @@ $(document).ready(function() {
 
 
     function compute() {
-        var sourceInput = document.getElementById("source");
-        var fileInput = document.getElementById('input');
+        if(isEmpty(graph)) {
+            var fileInput = document.getElementById('input');
 
-        if (fileInput.files.length > 0 && sourceInput.value !== "") {
-            readFile(fileInput, function(text) {
-                graph = parseGraph(text);
-                document.getElementById('graph-content').innerText = prettyPrint(graph);
-                var source = sourceInput.value;
-                console.log(source, graph);
-                render(graph, source);
-            });
+            if (fileInput.files.length > 0) {
+                readFile(fileInput, function(text) {
+                    graph = parseGraph(text);
+                    document.getElementById('graph-content').innerText = prettyPrint(graph);
+                    console.log(graph);
+                    render(graph);
+                });
+            } else {
+                display("Input is empty");
+            }
         } else {
-            display("Input is empty");
+            render(graph);
         }
     }
 
@@ -107,13 +109,18 @@ $(document).ready(function() {
         return retulrStr;
     }
 
-    function render(graph, source) {
-        var problem = new Dijkstra(graph, source);
-        var result = problem.solve();
-
-        var resultStr = getResultStr(result);
-        document.getElementById('graph-content').innerText = prettyPrint(graph)
-        display(resultStr);
+    function render(graph) {
+        var source = $('#source').val();
+        if(source.length) {
+            var problem = new Dijkstra(graph, source);
+            var result = problem.solve();
+    
+            var resultStr = getResultStr(result);
+            document.getElementById('graph-content').innerText = prettyPrint(graph)
+            display(resultStr);
+        } else {
+            display("error: source is empty");
+        }
     }
 
     // Example of using update.js
@@ -123,56 +130,63 @@ $(document).ready(function() {
 
     // Re-export
     function updateEdge() {
-        var src = document.getElementById('update-edge-src').value;
-        var dest = document.getElementById('update-edge-dest').value;
-        var weight = document.getElementById('update-edge-weight').value;
-        var source = document.getElementById("source").value;
+        var srcVal = $('#update-edge-src').val();
+        var destVal = $('#update-edge-dest').val();
+        var weightVal = $('#update-edge-weight').val();
 
-        if(src.length && dest.length && weight.length && source.length) {
-            update.updateEdge(graph, src, dest, parseInt(weight));
-            render(graph, source);
+        if(srcVal.length && destVal.length && weightVal.length) {
+            update.updateEdge(graph, srcVal, destVal, parseInt(weightVal));
+            render(graph);
         } else {
             display("error: you don't enter everything!");
         }
+        $('#update-edge-src').val('');
+        $('#update-edge-dest').val('');
+        $('#update-edge-weight').val('');
     }
 
     function addNewNode() {
-        var nodeId = document.getElementById('add-new-node-id').value;
-        var source = document.getElementById("source").value;
+        var nodeIdVal = $('#add-new-node-id').val();
 
-        if(nodeId.length && source.length) {
-            update.addNode(graph, nodeId, {});
-            render(graph, source);
+        if(nodeIdVal.length) {
+            update.addNode(graph, nodeIdVal, {});
+            render(graph);
         } else {
             display("error: you don't enter everything!");
         }
+
+        $('#add-new-node-id').val('');
     }
 
     function deleteNode() {
-        var nodeId = document.getElementById('delete-node-id').value;
-        var source = document.getElementById("source").value;
+        var nodeIdVal = $('#delete-node-id').val();
 
-        if(nodeId.length && source.length) {
-            update.deleteNode(graph, nodeId);
-            render(graph, source);
+        if(nodeIdVal.length) {
+            update.deleteNode(graph, nodeIdVal);
+            render(graph);
         } else {
             display("error: you don't enter everything!");
         }
+
+        $('#delete-node-id').val('');
     }
 
     function deleteEdge() {
-        var src = document.getElementById('delete-edge-src').value;
-        var dest = document.getElementById('delete-edge-dest').value;
-        var source = document.getElementById("source").value;
+        var srcVal = $('#delete-edge-src').val();
+        var destVal = $('#delete-edge-dest').val();
 
-        if(src.length && dest.length && source.length) {
-            update.deleteEdge(graph, src, dest);
-            render(graph, source);
+        if(srcVal.length && destVal.length) {
+            update.deleteEdge(graph, srcVal, destVal);
+            render(graph);
         } else {
             display("error: you don't enter everything!");
         }
+        $('#delete-edge-src').val('');
+        $('#delete-edge-dest').val('');
     }
 
+
+    // Helpers
 
     function prettyPrint(graph) {
         var str = "";
@@ -185,5 +199,13 @@ $(document).ready(function() {
             str += "\n";
         }
         return str;
+    }
+
+    function isEmpty(obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+        return true;
     }
 });

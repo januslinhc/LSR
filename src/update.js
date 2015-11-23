@@ -8,7 +8,7 @@
 // module.exports = updateExport;
 // //// for node.js //////
 
-function updateExport (display) {
+function updateExport(display) {
     function updateEdge(graph, src, dest, weight) {
         if(graph && graph[src]){
             if(!graph[src][dest]) {
@@ -29,7 +29,7 @@ function updateExport (display) {
             delete graph[src][dest];
             delete graph[dest][src];
         } else {
-            display("warning: Deletion of edge is invalid")
+            display("warning: Deletion of edge is invalid");
         }
     }
 

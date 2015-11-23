@@ -7,12 +7,18 @@
 
 $(document).ready(function() {
     var graph = {};
-    var source;
+    var sourceName;
+
+    // Page elements
+    var sourceInput = document.getElementById("source");
+    var fileInput = document.getElementById('input');
+    var graphContetOutput = document.getElementById('graph-content');
+    var feedbackOutput = document.getElementById('feedback');
 
     $('#input').change(function (event) {
         if (this.files.length > 0) {
             readFile(this, function (text) {
-                document.getElementById('graph-content').innerText = text; // 显示文件
+                graphContetOutput.innerText = text; // 显示文件
                 graph = parseGraph(text);
                 console.log(graph);
             });
@@ -34,6 +40,7 @@ $(document).ready(function() {
     $('#single-step-btn').click(function (event) {
         event.preventDefault();
 
+        singleStep();
     });
 
     // Add / Update Edge
@@ -64,6 +71,9 @@ $(document).ready(function() {
         deleteEdge();
     });
 
+    function singleStep() {
+
+    }
 
     function compute() {
         if(isEmpty(graph)) {
@@ -85,7 +95,7 @@ $(document).ready(function() {
     }
 
     function display(text) {
-        document.getElementById('feedback').innerText = text;
+        feedbackOutput.innerText = text;
     }
 
     function getResultStr(result) {
@@ -116,7 +126,7 @@ $(document).ready(function() {
             var result = problem.solve();
     
             var resultStr = getResultStr(result);
-            document.getElementById('graph-content').innerText = prettyPrint(graph)
+            graphContetOutput.innerText = prettyPrint(graph)
             display(resultStr);
         } else {
             display("error: source is empty");
@@ -184,7 +194,6 @@ $(document).ready(function() {
         $('#delete-edge-src').val('');
         $('#delete-edge-dest').val('');
     }
-
 
     // Helpers
 
